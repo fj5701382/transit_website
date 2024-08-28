@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="INDEX.CSS">
+    
+</head>
+<body>
+    <div class="registration-form">
+        <h2>Register</h2>
+        <form action="/submit_registration" method="POST">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+<script>
+    const Form = document.getElementById("form"),
+    Button = Form.querySelector(".submit button"),  // Corrected selector
+    Errormsg = Form.querySelector(".error-text");
+
+    Form.onsubmit = (e) => {
+        e.preventDefault();
+    }
+
+    Button.onclick = () => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'index.php', true);
+        xhr.onload = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    let data = xhr.response;
+                    if (data === "success") {
+                        window.location.href = "rt.html";  // Use a relative URL
+                    } else {
+                        Errormsg.style.display = "block";  // Corrected to display error
+                        Errormsg.textContent = data;
+
+                        setTimeout(() => {
+                            Errormsg.style.display = "none";
+                        }, 3000);
+                    }
+                }
+            }
+        }
+
+        let formData = new FormData(Form);
+        xhr.send(formData);
+    }
+    </script>
+</html>
